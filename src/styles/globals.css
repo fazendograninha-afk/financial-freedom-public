@@ -1,0 +1,267 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --gold: #d97706;
+  --gold-bright: #f59e0b;
+  --gold-dark: #92400e;
+  --obsidian: #050508;
+  --obsidian-2: #0a0a0f;
+  --obsidian-3: #0f0f18;
+  --obsidian-4: #141420;
+  --obsidian-5: #1a1a28;
+  --text-primary: #f5f0e8;
+  --text-secondary: #a89f8c;
+  --border: rgba(217, 119, 6, 0.2);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--obsidian);
+  color: var(--text-primary);
+  font-family: 'DM Sans', system-ui, sans-serif;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 4px;
+}
+::-webkit-scrollbar-track {
+  background: var(--obsidian-2);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--gold-dark);
+  border-radius: 2px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--gold);
+}
+
+/* Gold gradient text */
+.text-gold-gradient {
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 40%, #fbbf24 70%, #92400e 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Shimmer animation for gold text */
+.text-gold-shimmer {
+  background: linear-gradient(90deg, #92400e 0%, #d97706 25%, #fbbf24 50%, #d97706 75%, #92400e 100%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: shimmer 3s linear infinite;
+}
+
+@keyframes shimmer {
+  0% { background-position: 200% center; }
+  100% { background-position: -200% center; }
+}
+
+/* Atomic particles background */
+.atomic-bg {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.particle {
+  position: absolute;
+  border-radius: 50%;
+  background: var(--gold);
+  opacity: 0;
+  animation: particle-float linear infinite;
+}
+
+@keyframes particle-float {
+  0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+  10% { opacity: 0.3; }
+  90% { opacity: 0.1; }
+  100% { transform: translateY(-100px) rotate(720deg); opacity: 0; }
+}
+
+/* Gold border glow */
+.border-gold-glow {
+  border: 1px solid rgba(217, 119, 6, 0.4);
+  box-shadow: 0 0 15px rgba(217, 119, 6, 0.1), inset 0 0 15px rgba(217, 119, 6, 0.05);
+  transition: all 0.3s ease;
+}
+
+.border-gold-glow:hover {
+  border-color: rgba(245, 158, 11, 0.6);
+  box-shadow: 0 0 25px rgba(245, 158, 11, 0.2), inset 0 0 25px rgba(245, 158, 11, 0.05);
+}
+
+/* Glass effect */
+.glass {
+  background: rgba(10, 10, 15, 0.8);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+.glass-gold {
+  background: rgba(217, 119, 6, 0.05);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+/* Button gold */
+.btn-gold {
+  background: linear-gradient(135deg, #d97706, #92400e);
+  color: #fff8e7;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-gold::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
+  transform: rotate(45deg);
+  transition: all 0.5s ease;
+  opacity: 0;
+}
+
+.btn-gold:hover::before {
+  opacity: 1;
+  transform: rotate(45deg) translateX(50%);
+}
+
+.btn-gold:hover {
+  box-shadow: 0 0 30px rgba(217, 119, 6, 0.5);
+  transform: translateY(-1px);
+}
+
+/* Hexagon pattern */
+.hex-pattern {
+  background-image: 
+    radial-gradient(circle at 1px 1px, rgba(217, 119, 6, 0.08) 1px, transparent 0);
+  background-size: 40px 40px;
+}
+
+/* Scan line effect */
+.scanline {
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 0, 0, 0.1) 2px,
+    rgba(0, 0, 0, 0.1) 4px
+  );
+}
+
+/* Chat bubble */
+.chat-user {
+  background: linear-gradient(135deg, rgba(217, 119, 6, 0.15), rgba(146, 64, 14, 0.1));
+  border: 1px solid rgba(217, 119, 6, 0.3);
+  border-radius: 18px 18px 4px 18px;
+}
+
+.chat-ai {
+  background: rgba(15, 15, 24, 0.9);
+  border: 1px solid rgba(217, 119, 6, 0.15);
+  border-radius: 18px 18px 18px 4px;
+}
+
+/* Orbit animation for landing */
+@keyframes orbit {
+  from { transform: rotate(0deg) translateX(120px) rotate(0deg); }
+  to { transform: rotate(360deg) translateX(120px) rotate(-360deg); }
+}
+
+@keyframes orbit-reverse {
+  from { transform: rotate(0deg) translateX(180px) rotate(0deg); }
+  to { transform: rotate(-360deg) translateX(180px) rotate(360deg); }
+}
+
+.orbit-1 { animation: orbit 8s linear infinite; }
+.orbit-2 { animation: orbit-reverse 12s linear infinite; }
+.orbit-3 { animation: orbit 15s linear infinite; animation-delay: -5s; }
+
+/* Typing indicator */
+@keyframes typing {
+  0%, 60%, 100% { transform: translateY(0); opacity: 0.4; }
+  30% { transform: translateY(-6px); opacity: 1; }
+}
+
+.typing-dot {
+  animation: typing 1.4s ease-in-out infinite;
+}
+.typing-dot:nth-child(2) { animation-delay: 0.2s; }
+.typing-dot:nth-child(3) { animation-delay: 0.4s; }
+
+/* Pulse ring */
+@keyframes pulse-ring {
+  0% { transform: scale(0.8); opacity: 0.8; }
+  100% { transform: scale(2); opacity: 0; }
+}
+
+.pulse-ring {
+  animation: pulse-ring 2s ease-out infinite;
+}
+
+/* Level indicator */
+.level-badge {
+  background: linear-gradient(135deg, rgba(217, 119, 6, 0.2), rgba(146, 64, 14, 0.1));
+  border: 1px solid rgba(217, 119, 6, 0.4);
+}
+
+/* Disclaimer box */
+.disclaimer-box {
+  background: rgba(5, 5, 8, 0.9);
+  border: 1px solid rgba(217, 119, 6, 0.2);
+  border-left: 3px solid var(--gold);
+}
+
+/* Input gold focus */
+.input-gold {
+  background: rgba(10, 10, 15, 0.8);
+  border: 1px solid rgba(217, 119, 6, 0.2);
+  color: var(--text-primary);
+  transition: all 0.3s ease;
+}
+
+.input-gold:focus {
+  outline: none;
+  border-color: rgba(245, 158, 11, 0.6);
+  box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.1);
+}
+
+.input-gold::placeholder {
+  color: rgba(168, 159, 140, 0.5);
+}
+
+/* Star field */
+.stars {
+  background-image: 
+    radial-gradient(1px 1px at 20% 30%, rgba(245,158,11,0.5) 0%, transparent 100%),
+    radial-gradient(1px 1px at 80% 10%, rgba(245,158,11,0.3) 0%, transparent 100%),
+    radial-gradient(1px 1px at 50% 60%, rgba(255,255,255,0.2) 0%, transparent 100%),
+    radial-gradient(1px 1px at 10% 80%, rgba(245,158,11,0.4) 0%, transparent 100%),
+    radial-gradient(1px 1px at 90% 70%, rgba(255,255,255,0.15) 0%, transparent 100%);
+}

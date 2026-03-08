@@ -103,7 +103,7 @@ export default function Home() {
           <header className="relative z-10 flex justify-between items-center px-6 py-5" style={{borderBottom: '1px solid rgba(217,119,6,0.15)'}}>
             <div>
               <h1 className="font-display text-xl font-bold text-gold-gradient">Financial Freedom</h1>
-              <p className="text-xs" style={{color: 'var(--text-secondary)'}}>by MaicknucleaR</p>
+              <p className="text-xs" style={{color: '#ffffff'}}>by MaicknucleaR</p>
             </div>
             <div className="flex gap-3">
               <button onClick={() => setMode('login')}
@@ -382,7 +382,7 @@ function Footer({ compact = false }: { compact?: boolean }) {
       <p className="text-xs" style={{color: 'var(--text-secondary)'}}>
         ⚠️ Plataforma educacional. Não constitui consultoria financeira.
       </p>
-      <p className="text-xs mt-1" style={{color: 'rgba(168,159,140,0.5)'}}>
+      <p className="text-xs mt-1" style={{color: '#ffffff'}}>
         Criado Por MaicknucleaR — <a href="https://instagram.com/dubmariachi" target="_blank" rel="noopener noreferrer"
           className="hover:underline" style={{color: '#d97706'}}>@dubmariachi</a>
       </p>

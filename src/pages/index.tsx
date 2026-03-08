@@ -197,7 +197,7 @@ export default function Home() {
               </p>
               <a href={AFFILIATE_LINK} target="_blank" rel="noopener noreferrer"
                 className="text-sm font-semibold block mb-1 hover:underline" style={{color: '#d97706'}}>
-                📚 A Psicologia Financeira — Morgan Housel
+                [Livro] A Psicologia Financeira — Morgan Housel
               </a>
               <p className="text-xs" style={{color: 'var(--text-secondary)'}}>
                 Lições atemporais sobre fortuna, ganância e felicidade
@@ -341,7 +341,7 @@ export default function Home() {
 
                 {mode === 'register' && (
                   <div className="space-y-3 pt-2">
-                    <p className="text-xs font-medium" style={{color: '#d97706'}}>⚠️ Antes de continuar, confirme:</p>
+                    <p className="text-xs font-medium" style={{color: '#d97706'}}>[!] Antes de continuar, confirme:</p>
                     {[
                       { key: 'notConsultancy', label: 'Entendo que esta plataforma não fornece consultoria ou recomendação de investimentos' },
                       { key: 'myResponsibility', label: 'Reconheço que todas as decisões financeiras são de minha exclusiva responsabilidade' },
@@ -387,7 +387,7 @@ export default function Home() {
             </div>
 
             <div className="disclaimer-box rounded-lg p-4 mt-4 text-xs leading-relaxed" style={{color: 'var(--text-secondary)'}}>
-              ⚠️ {DISCLAIMER_SHORT}
+              [!] {DISCLAIMER_SHORT}
             </div>
 
             <div className="flex justify-center gap-4 mt-4 text-xs" style={{color: 'var(--text-secondary)'}}>
@@ -405,3 +405,4 @@ export default function Home() {
     </>
   )
 }
+

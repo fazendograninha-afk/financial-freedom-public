@@ -74,7 +74,7 @@ export default function Home() {
     if (!email) return toast.error('Digite seu e-mail primeiro')
     setLoading(true)
     const { error } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: 'https://financial-freedom-public-production.up.railway.app/reset-password',
+      redirectTo: 'https://financial-freedom-by-maicknuclear.up.railway.app/reset-password',
     })
     if (error) {
       toast.error(error.message)

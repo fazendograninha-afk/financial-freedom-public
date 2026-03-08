@@ -191,20 +191,26 @@ export default function Home() {
               ))}
             </div>
 
-            {/* Affiliate Link */}
-            <div className="mt-16 p-4 rounded-xl max-w-lg w-full text-center"
-              style={{background: 'rgba(217,119,6,0.05)', border: '1px solid rgba(217,119,6,0.15)'}}>
-              <p className="text-xs mb-2" style={{color: 'var(--text-secondary)'}}>
-                🔗 <em>Link de afiliado</em> — Parceiro recomendado
-              </p>
-              <a href="https://hotmart.com/pt-br/marketplace/produtos/oryon-mesas-proprietarias/G102265023L?ref=F104360614F"
-                target="_blank" rel="noopener noreferrer"
-                className="text-sm font-medium hover:underline" style={{color: '#d97706'}}>
-                🏆 ORYON Mesas Proprietárias — Opere com Capital Financiado
-              </a>
-              <p className="text-xs mt-1" style={{color: 'var(--text-secondary)', opacity: 0.6}}>
-                (Este é um link de afiliado. Posso receber comissão sem custo adicional para você.)
-              </p>
+            {/* Affiliate Links */}
+            <div className="mt-16 max-w-lg w-full space-y-3">
+              <div className="p-4 rounded-xl text-center"
+                style={{background: 'rgba(217,119,6,0.05)', border: '1px solid rgba(217,119,6,0.15)'}}>
+                <p className="text-xs mb-2" style={{color: 'var(--text-secondary)'}}>
+                  🔗 <em>Link de afiliado</em> — Leitura recomendada
+                </p>
+                <a href="https://www.mercadolivre.com.br/livro-a-psicologia-financeira-licoes-atemporais-sobre-fortuna-ganncia-e-felicidade-de-housel-morgan-editora-harpercollins-brasil-capa-mole-em-portugus-2021/p/MLB19320442?matt_event_ts=1772937327156&matt_d2id=dfa58651-a180-428e-94df-fc8220896524&matt_tracing_id=2645612b-68d0-448d-b4bc-afd2c69ca15b#polycard_client=recommendations_home_affiliate-profile&reco_backend=item_decorator&reco_client=home_affiliate-profile&reco_item_pos=0&source=affiliate-profile&reco_backend_type=function&reco_id=d6662921-6799-4116-87e3-70bcf33908c5&tracking_id=7fda547d-806f-4eb5-b606-fcfc0e6d0c51&wid=MLB5270193474&sid=recos&c_id=/home/card-featured/element&c_uid=2068bc96-c9f3-4c7c-9c82-1cce86d69fd4"
+                  target="_blank" rel="noopener noreferrer"
+                  className="text-sm font-medium hover:underline block" style={{color: '#d97706'}}>
+                  📚 A Psicologia Financeira — Morgan Housel
+                </a>
+                <p className="text-xs mt-1" style={{color: 'var(--text-secondary)'}}>
+                  Lições atemporais sobre fortuna, ganância e felicidade
+                </p>
+                <p className="text-xs mt-0.5" style={{color: 'var(--text-secondary)', opacity: 0.6}}>
+                  (Link de afiliado — comissão sem custo adicional para você)
+                </p>
+              </div>
+
             </div>
 
             {/* QR Code Donation */}
@@ -335,6 +341,15 @@ export default function Home() {
                   className="w-full btn-gold py-3 rounded-lg font-semibold text-sm mt-2 disabled:opacity-40 disabled:cursor-not-allowed">
                   {loading ? 'Aguarde...' : mode === 'login' ? 'Entrar' : 'Criar Conta Gratuita'}
                 </button>
+
+                {mode === 'login' && (
+                  <div className="text-center">
+                    <a href="/forgot-password"
+                      className="text-xs hover:underline" style={{color: 'rgba(217,119,6,0.7)'}}>
+                      Esqueci minha senha
+                    </a>
+                  </div>
+                )}
 
                 <button onClick={() => setMode(mode === 'login' ? 'register' : 'login')}
                   className="w-full text-center text-sm py-2 transition-colors"

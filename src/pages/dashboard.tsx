@@ -173,14 +173,14 @@ export default function Dashboard() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
             <div className="rounded-xl p-5"
               style={{background: 'rgba(217,119,6,0.05)', border: '1px solid rgba(217,119,6,0.15)'}}>
-              <p className="text-xs mb-2" style={{color: 'var(--text-secondary)'}}>🔗 Link de afiliado</p>
-              <a href="https://hotmart.com/pt-br/marketplace/produtos/oryon-mesas-proprietarias/G102265023L?ref=F104360614F"
+              <p className="text-xs mb-3" style={{color: 'var(--text-secondary)'}}>🔗 Links de afiliado</p>
+              <a href="https://www.mercadolivre.com.br/livro-a-psicologia-financeira-licoes-atemporais-sobre-fortuna-ganncia-e-felicidade-de-housel-morgan-editora-harpercollins-brasil-capa-mole-em-portugus-2021/p/MLB19320442?matt_event_ts=1772937327156&matt_d2id=dfa58651-a180-428e-94df-fc8220896524&matt_tracing_id=2645612b-68d0-448d-b4bc-afd2c69ca15b#polycard_client=recommendations_home_affiliate-profile&reco_backend=item_decorator&reco_client=home_affiliate-profile&reco_item_pos=0&source=affiliate-profile&reco_backend_type=function&reco_id=d6662921-6799-4116-87e3-70bcf33908c5&tracking_id=7fda547d-806f-4eb5-b606-fcfc0e6d0c51&wid=MLB5270193474&sid=recos&c_id=/home/card-featured/element&c_uid=2068bc96-c9f3-4c7c-9c82-1cce86d69fd4"
                 target="_blank" rel="noopener noreferrer"
                 className="font-semibold text-sm block mb-1 hover:underline" style={{color: '#d97706'}}>
-                🏆 ORYON Mesas Proprietárias
+                📚 A Psicologia Financeira — Morgan Housel
               </a>
-              <p className="text-xs" style={{color: 'var(--text-secondary)'}}>
-                Opere com capital financiado. (Comissão paga pelo vendedor, sem custo para você)
+              <p className="text-xs mt-1" style={{color: 'var(--text-secondary)', opacity: 0.6}}>
+                (Link de afiliado — sem custo adicional para você)
               </p>
             </div>
             <div className="rounded-xl p-5 text-center"

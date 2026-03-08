@@ -3,12 +3,15 @@ import { supabase } from '../lib/supabase'
 import { useRouter } from 'next/router'
 import toast from 'react-hot-toast'
 import Head from 'next/head'
+import Footer from '../components/Footer'
 
 const DISCLAIMER_SHORT = `Esta plataforma é uma ferramenta digital de organização e visualização de informações financeiras para fins exclusivamente educacionais e informacionais. Não constitui consultoria financeira, recomendação de investimento ou assessoria de qualquer natureza. Toda decisão financeira é de exclusiva responsabilidade do usuário.`
 
+const AFFILIATE_LINK = `https://www.mercadolivre.com.br/livro-a-psicologia-financeira-licoes-atemporais-sobre-fortuna-ganncia-e-felicidade-de-housel-morgan-editora-harpercollins-brasil-capa-mole-em-portugus-2021/p/MLB19320442?matt_event_ts=1772937327156&matt_d2id=dfa58651-a180-428e-94df-fc8220896524&matt_tracing_id=2645612b-68d0-448d-b4bc-afd2c69ca15b#polycard_client=recommendations_home_affiliate-profile&reco_backend=item_decorator&reco_client=home_affiliate-profile&reco_item_pos=0&source=affiliate-profile&reco_backend_type=function&reco_id=d6662921-6799-4116-87e3-70bcf33908c5&tracking_id=7fda547d-806f-4eb5-b606-fcfc0e6d0c51&wid=MLB5270193474&sid=recos&c_id=/home/card-featured/element&c_uid=2068bc96-c9f3-4c7c-9c82-1cce86d69fd4`
+
 export default function Home() {
   const router = useRouter()
-  const [mode, setMode] = useState<'landing' | 'login' | 'register'>('landing')
+  const [mode, setMode] = useState<'landing' | 'login' | 'register' | 'forgot'>('landing')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [loading, setLoading] = useState(false)
@@ -21,11 +24,9 @@ export default function Home() {
   const [particles, setParticles] = useState<Array<{id: number, size: number, left: number, duration: number, delay: number}>>([])
 
   useEffect(() => {
-    // Check if already logged in
     supabase.auth.getUser().then(({ data }) => {
       if (data.user) router.push('/dashboard')
     })
-    // Generate particles
     const p = Array.from({ length: 20 }, (_, i) => ({
       id: i,
       size: Math.random() * 3 + 1,
@@ -55,55 +56,62 @@ export default function Home() {
     if (!email || !password) return toast.error('Preencha todos os campos')
     if (password.length < 6) return toast.error('A senha deve ter pelo menos 6 caracteres')
     setLoading(true)
-    const { error } = await supabase.auth.signUp({ 
-      email, 
+    const { error } = await supabase.auth.signUp({
+      email,
       password,
       options: { data: { financial_profile: 'conservador', level: 'iniciante' } }
     })
     if (error) {
       toast.error(error.message)
     } else {
-      toast.success('Conta criada! Verifique seu e-mail se necessário.')
+      toast.success('Conta criada! Verifique seu e-mail.')
       router.push('/onboarding')
+    }
+    setLoading(false)
+  }
+
+  const handleForgotPassword = async () => {
+    if (!email) return toast.error('Digite seu e-mail primeiro')
+    setLoading(true)
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: 'https://financial-freedom-public-production.up.railway.app/reset-password',
+    })
+    if (error) {
+      toast.error(error.message)
+    } else {
+      toast.success('E-mail de recuperação enviado! Verifique sua caixa de entrada.')
+      setMode('login')
     }
     setLoading(false)
   }
 
   const allChecked = Object.values(checkboxes).every(Boolean)
 
+  // ── LANDING ──────────────────────────────────────────────────────────────
   if (mode === 'landing') {
     return (
       <>
         <Head><title>Financial Freedom by MaicknucleaR</title></Head>
         <div className="min-h-screen relative overflow-hidden" style={{background: 'var(--obsidian)'}}>
-          {/* Atomic particles */}
           <div className="atomic-bg">
             {particles.map(p => (
-              <div
-                key={p.id}
-                className="particle"
-                style={{
-                  width: p.size, height: p.size,
-                  left: `${p.left}%`,
-                  animationDuration: `${p.duration}s`,
-                  animationDelay: `${p.delay}s`,
-                }}
-              />
+              <div key={p.id} className="particle" style={{
+                width: p.size, height: p.size,
+                left: `${p.left}%`,
+                animationDuration: `${p.duration}s`,
+                animationDelay: `${p.delay}s`,
+              }} />
             ))}
           </div>
-
-          {/* Grid pattern */}
           <div className="fixed inset-0 hex-pattern opacity-30 pointer-events-none" />
-
-          {/* Central glow */}
           <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 rounded-full pointer-events-none"
             style={{background: 'radial-gradient(circle, rgba(217,119,6,0.08) 0%, transparent 70%)'}} />
 
-          {/* Header */}
-          <header className="relative z-10 flex justify-between items-center px-6 py-5" style={{borderBottom: '1px solid rgba(217,119,6,0.15)'}}>
+          <header className="relative z-10 flex justify-between items-center px-6 py-5"
+            style={{borderBottom: '1px solid rgba(217,119,6,0.15)'}}>
             <div>
               <h1 className="font-display text-xl font-bold text-gold-gradient">Financial Freedom</h1>
-              <p className="text-xs" style={{color: '#ffffff'}}>by MaicknucleaR</p>
+              <p className="text-xs font-semibold" style={{color: '#ffffff'}}>by MaicknucleaR</p>
             </div>
             <div className="flex gap-3">
               <button onClick={() => setMode('login')}
@@ -111,23 +119,19 @@ export default function Home() {
                 style={{borderColor: 'rgba(217,119,6,0.3)', color: '#d97706'}}>
                 Entrar
               </button>
-              <button onClick={() => setMode('register')}
-                className="btn-gold px-5 py-2 text-sm rounded-lg">
+              <button onClick={() => setMode('register')} className="btn-gold px-5 py-2 text-sm rounded-lg">
                 Começar Grátis
               </button>
             </div>
           </header>
 
-          {/* Hero */}
           <main className="relative z-10 flex flex-col items-center justify-center px-6 py-20 text-center">
-            {/* Beta badge */}
             <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full mb-8 text-xs font-medium"
               style={{background: 'rgba(217,119,6,0.1)', border: '1px solid rgba(217,119,6,0.3)', color: '#d97706'}}>
               <span className="w-2 h-2 rounded-full bg-yellow-500 animate-pulse" />
               Versão Beta — Temporariamente Gratuita
             </div>
 
-            {/* Orbital icon */}
             <div className="relative w-40 h-40 mx-auto mb-10">
               <div className="absolute inset-0 flex items-center justify-center">
                 <div className="w-16 h-16 rounded-full flex items-center justify-center text-3xl"
@@ -135,7 +139,6 @@ export default function Home() {
                   ₿
                 </div>
               </div>
-              {/* Orbital rings */}
               <div className="absolute inset-0 rounded-full" style={{border: '1px solid rgba(217,119,6,0.2)'}} />
               <div className="absolute inset-4 rounded-full" style={{border: '1px dashed rgba(217,119,6,0.15)'}} />
               <div className="orbit-1 absolute top-1/2 left-1/2 w-3 h-3 -mt-1.5 -ml-1.5 rounded-full"
@@ -145,19 +148,17 @@ export default function Home() {
             </div>
 
             <h2 className="font-display text-5xl md:text-7xl font-black mb-4 leading-tight">
-              <span className="text-gold-shimmer">Do Salário Mínimo</span>
-              <br />
+              <span className="text-gold-shimmer">Do Salário Mínimo</span><br />
               <span style={{color: 'var(--text-primary)'}}>ao Primeiro</span>
               <span className="text-gold-gradient"> Milhão</span>
             </h2>
 
             <p className="text-lg md:text-xl max-w-2xl mb-10 leading-relaxed" style={{color: 'var(--text-secondary)'}}>
-              Plataforma educacional com as mentalidades dos maiores investidores do mundo. 
+              Plataforma educacional com as mentalidades dos maiores investidores do mundo.
               <br className="hidden md:block" />
               Inteligência financeira para quem quer transformar sua realidade.
             </p>
 
-            {/* Feature pills */}
             <div className="flex flex-wrap justify-center gap-3 mb-12">
               {['Warren Buffett', 'Ray Dalio', 'Michael Saylor', 'George Soros', 'Jim Simons', '+10 lendas'].map(name => (
                 <span key={name} className="px-3 py-1 rounded-full text-xs font-medium"
@@ -171,11 +172,8 @@ export default function Home() {
               className="btn-gold px-10 py-4 rounded-xl text-lg font-semibold mb-4">
               Criar Conta Gratuita →
             </button>
-            <p className="text-xs" style={{color: 'var(--text-secondary)'}}>
-              Sem cartão de crédito. Sem compromisso.
-            </p>
+            <p className="text-xs" style={{color: 'var(--text-secondary)'}}>Sem cartão de crédito. Sem compromisso.</p>
 
-            {/* Level cards */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-16 max-w-4xl w-full">
               {[
                 { icon: '🌱', title: 'Iniciante', desc: 'Salário mínimo → Primeiros investimentos', color: '#16a34a' },
@@ -191,29 +189,25 @@ export default function Home() {
               ))}
             </div>
 
-            {/* Affiliate Links */}
-            <div className="mt-16 max-w-lg w-full space-y-3">
-              <div className="p-4 rounded-xl text-center"
-                style={{background: 'rgba(217,119,6,0.05)', border: '1px solid rgba(217,119,6,0.15)'}}>
-                <p className="text-xs mb-2" style={{color: 'var(--text-secondary)'}}>
-                  🔗 <em>Link de afiliado</em> — Leitura recomendada
-                </p>
-                <a href="https://www.mercadolivre.com.br/livro-a-psicologia-financeira-licoes-atemporais-sobre-fortuna-ganncia-e-felicidade-de-housel-morgan-editora-harpercollins-brasil-capa-mole-em-portugus-2021/p/MLB19320442?matt_event_ts=1772937327156&matt_d2id=dfa58651-a180-428e-94df-fc8220896524&matt_tracing_id=2645612b-68d0-448d-b4bc-afd2c69ca15b#polycard_client=recommendations_home_affiliate-profile&reco_backend=item_decorator&reco_client=home_affiliate-profile&reco_item_pos=0&source=affiliate-profile&reco_backend_type=function&reco_id=d6662921-6799-4116-87e3-70bcf33908c5&tracking_id=7fda547d-806f-4eb5-b606-fcfc0e6d0c51&wid=MLB5270193474&sid=recos&c_id=/home/card-featured/element&c_uid=2068bc96-c9f3-4c7c-9c82-1cce86d69fd4"
-                  target="_blank" rel="noopener noreferrer"
-                  className="text-sm font-medium hover:underline block" style={{color: '#d97706'}}>
-                  📚 A Psicologia Financeira — Morgan Housel
-                </a>
-                <p className="text-xs mt-1" style={{color: 'var(--text-secondary)'}}>
-                  Lições atemporais sobre fortuna, ganância e felicidade
-                </p>
-                <p className="text-xs mt-0.5" style={{color: 'var(--text-secondary)', opacity: 0.6}}>
-                  (Link de afiliado — comissão sem custo adicional para você)
-                </p>
-              </div>
-
+            {/* Affiliate — Livro Psicologia Financeira */}
+            <div className="mt-16 p-5 rounded-xl max-w-lg w-full text-center"
+              style={{background: 'rgba(217,119,6,0.05)', border: '1px solid rgba(217,119,6,0.2)'}}>
+              <p className="text-xs mb-1" style={{color: 'var(--text-secondary)'}}>
+                🔗 <em>Link de afiliado</em> — Leitura recomendada
+              </p>
+              <a href={AFFILIATE_LINK} target="_blank" rel="noopener noreferrer"
+                className="text-sm font-semibold block mb-1 hover:underline" style={{color: '#d97706'}}>
+                📚 A Psicologia Financeira — Morgan Housel
+              </a>
+              <p className="text-xs" style={{color: 'var(--text-secondary)'}}>
+                Lições atemporais sobre fortuna, ganância e felicidade
+              </p>
+              <p className="text-xs mt-1" style={{color: 'rgba(168,159,140,0.5)'}}>
+                (Link de afiliado — posso receber comissão sem custo adicional para você)
+              </p>
             </div>
 
-            {/* QR Code Donation */}
+            {/* QR Code */}
             <div className="mt-8 p-4 rounded-xl text-center"
               style={{background: 'rgba(10,10,15,0.6)', border: '1px solid rgba(217,119,6,0.15)'}}>
               <p className="text-sm mb-3" style={{color: 'var(--text-secondary)'}}>☕ Apoie este projeto com qualquer valor</p>
@@ -232,6 +226,63 @@ export default function Home() {
     )
   }
 
+  // ── FORGOT PASSWORD ───────────────────────────────────────────────────────
+  if (mode === 'forgot') {
+    return (
+      <>
+        <Head><title>Recuperar Senha — Financial Freedom</title></Head>
+        <div className="min-h-screen relative overflow-hidden flex flex-col" style={{background: 'var(--obsidian)'}}>
+          <div className="fixed inset-0 hex-pattern opacity-20 pointer-events-none" />
+          <header className="relative z-10 px-6 py-4">
+            <button onClick={() => setMode('login')} className="text-sm transition-colors"
+              style={{color: 'var(--text-secondary)'}}>← Voltar</button>
+          </header>
+          <div className="relative z-10 flex-1 flex items-center justify-center px-4 py-8">
+            <div className="w-full max-w-md">
+              <div className="text-center mb-8">
+                <div className="text-4xl mb-3">🔑</div>
+                <h1 className="font-display text-2xl font-bold text-gold-gradient">Recuperar Senha</h1>
+                <p className="text-sm mt-1" style={{color: 'var(--text-secondary)'}}>
+                  Digite seu e-mail e enviaremos um link de recuperação
+                </p>
+              </div>
+              <div className="rounded-2xl p-6 border-gold-glow" style={{background: 'rgba(10,10,15,0.9)'}}>
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium mb-1.5" style={{color: 'var(--text-secondary)'}}>
+                      E-mail cadastrado
+                    </label>
+                    <input
+                      type="email"
+                      value={email}
+                      onChange={e => setEmail(e.target.value)}
+                      placeholder="seu@email.com"
+                      className="input-gold w-full px-4 py-3 rounded-lg text-sm"
+                      onKeyDown={e => e.key === 'Enter' && handleForgotPassword()}
+                    />
+                  </div>
+                  <button
+                    onClick={handleForgotPassword}
+                    disabled={loading}
+                    className="w-full btn-gold py-3 rounded-lg font-semibold text-sm disabled:opacity-40">
+                    {loading ? 'Enviando...' : 'Enviar Link de Recuperação'}
+                  </button>
+                  <button onClick={() => setMode('login')}
+                    className="w-full text-center text-sm py-2" style={{color: 'var(--text-secondary)'}}>
+                    Lembrei a senha →{' '}
+                    <span style={{color: '#d97706'}}>Entrar</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <Footer compact />
+        </div>
+      </>
+    )
+  }
+
+  // ── LOGIN / REGISTER ──────────────────────────────────────────────────────
   return (
     <>
       <Head><title>{mode === 'login' ? 'Entrar' : 'Criar Conta'} — Financial Freedom</title></Head>
@@ -241,15 +292,12 @@ export default function Home() {
           style={{background: 'radial-gradient(circle, rgba(217,119,6,0.06) 0%, transparent 70%)'}} />
 
         <header className="relative z-10 px-6 py-4">
-          <button onClick={() => setMode('landing')} className="text-sm flex items-center gap-2 transition-colors"
-            style={{color: 'var(--text-secondary)'}}>
-            ← Voltar
-          </button>
+          <button onClick={() => setMode('landing')} className="text-sm transition-colors"
+            style={{color: 'var(--text-secondary)'}}>← Voltar</button>
         </header>
 
         <div className="relative z-10 flex-1 flex items-center justify-center px-4 py-8">
           <div className="w-full max-w-md">
-            {/* Logo */}
             <div className="text-center mb-8">
               <div className="w-14 h-14 rounded-full flex items-center justify-center text-2xl mx-auto mb-3"
                 style={{background: 'linear-gradient(135deg, #d97706, #92400e)', boxShadow: '0 0 30px rgba(217,119,6,0.3)'}}>
@@ -268,55 +316,44 @@ export default function Home() {
               )}
             </div>
 
-            {/* Form card */}
             <div className="rounded-2xl p-6 border-gold-glow" style={{background: 'rgba(10,10,15,0.9)'}}>
               <div className="space-y-4">
                 <div>
-                  <label className="block text-sm font-medium mb-1.5" style={{color: 'var(--text-secondary)'}}>
-                    E-mail
-                  </label>
-                  <input
-                    type="email"
-                    value={email}
-                    onChange={e => setEmail(e.target.value)}
-                    placeholder="seu@email.com"
-                    className="input-gold w-full px-4 py-3 rounded-lg text-sm"
-                  />
+                  <label className="block text-sm font-medium mb-1.5" style={{color: 'var(--text-secondary)'}}>E-mail</label>
+                  <input type="email" value={email} onChange={e => setEmail(e.target.value)}
+                    placeholder="seu@email.com" className="input-gold w-full px-4 py-3 rounded-lg text-sm" />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium mb-1.5" style={{color: 'var(--text-secondary)'}}>
-                    Senha
-                  </label>
-                  <input
-                    type="password"
-                    value={password}
-                    onChange={e => setPassword(e.target.value)}
+                  <div className="flex justify-between items-center mb-1.5">
+                    <label className="block text-sm font-medium" style={{color: 'var(--text-secondary)'}}>Senha</label>
+                    {mode === 'login' && (
+                      <button onClick={() => setMode('forgot')}
+                        className="text-xs hover:underline transition-colors" style={{color: '#d97706'}}>
+                        Esqueceu a senha?
+                      </button>
+                    )}
+                  </div>
+                  <input type="password" value={password} onChange={e => setPassword(e.target.value)}
                     placeholder={mode === 'register' ? 'Mínimo 6 caracteres' : '••••••••'}
                     className="input-gold w-full px-4 py-3 rounded-lg text-sm"
-                    onKeyDown={e => e.key === 'Enter' && (mode === 'login' ? handleLogin() : handleRegister())}
-                  />
+                    onKeyDown={e => e.key === 'Enter' && (mode === 'login' ? handleLogin() : handleRegister())} />
                 </div>
 
-                {/* Checkboxes for register */}
                 {mode === 'register' && (
                   <div className="space-y-3 pt-2">
-                    <p className="text-xs font-medium" style={{color: '#d97706'}}>
-                      ⚠️ Antes de continuar, confirme:
-                    </p>
+                    <p className="text-xs font-medium" style={{color: '#d97706'}}>⚠️ Antes de continuar, confirme:</p>
                     {[
                       { key: 'notConsultancy', label: 'Entendo que esta plataforma não fornece consultoria ou recomendação de investimentos' },
                       { key: 'myResponsibility', label: 'Reconheço que todas as decisões financeiras são de minha exclusiva responsabilidade' },
                       { key: 'understandRisk', label: 'Compreendo que investimentos podem resultar em perdas financeiras, inclusive perda total' },
                       { key: 'acceptTerms', label: 'Aceito integralmente os Termos de Uso, Disclaimer Financeiro e Política de Privacidade' },
                     ].map(({ key, label }) => (
-                      <label key={key} className="flex gap-3 cursor-pointer group">
+                      <label key={key} className="flex gap-3 cursor-pointer">
                         <div className="relative mt-0.5 flex-shrink-0">
-                          <input
-                            type="checkbox"
+                          <input type="checkbox"
                             checked={checkboxes[key as keyof typeof checkboxes]}
                             onChange={e => setCheckboxes(prev => ({...prev, [key]: e.target.checked}))}
-                            className="sr-only"
-                          />
+                            className="sr-only" />
                           <div className="w-4 h-4 rounded border transition-all flex items-center justify-center"
                             style={{
                               background: checkboxes[key as keyof typeof checkboxes] ? '#d97706' : 'transparent',
@@ -335,34 +372,20 @@ export default function Home() {
                   </div>
                 )}
 
-                <button
-                  onClick={mode === 'login' ? handleLogin : handleRegister}
+                <button onClick={mode === 'login' ? handleLogin : handleRegister}
                   disabled={loading || (mode === 'register' && !allChecked)}
                   className="w-full btn-gold py-3 rounded-lg font-semibold text-sm mt-2 disabled:opacity-40 disabled:cursor-not-allowed">
                   {loading ? 'Aguarde...' : mode === 'login' ? 'Entrar' : 'Criar Conta Gratuita'}
                 </button>
 
-                {mode === 'login' && (
-                  <div className="text-center">
-                    <a href="/forgot-password"
-                      className="text-xs hover:underline" style={{color: 'rgba(217,119,6,0.7)'}}>
-                      Esqueci minha senha
-                    </a>
-                  </div>
-                )}
-
                 <button onClick={() => setMode(mode === 'login' ? 'register' : 'login')}
-                  className="w-full text-center text-sm py-2 transition-colors"
-                  style={{color: 'var(--text-secondary)'}}>
+                  className="w-full text-center text-sm py-2" style={{color: 'var(--text-secondary)'}}>
                   {mode === 'login' ? 'Não tem conta? ' : 'Já tem conta? '}
-                  <span style={{color: '#d97706'}}>
-                    {mode === 'login' ? 'Criar grátis' : 'Entrar'}
-                  </span>
+                  <span style={{color: '#d97706'}}>{mode === 'login' ? 'Criar grátis' : 'Entrar'}</span>
                 </button>
               </div>
             </div>
 
-            {/* Short disclaimer */}
             <div className="disclaimer-box rounded-lg p-4 mt-4 text-xs leading-relaxed" style={{color: 'var(--text-secondary)'}}>
               ⚠️ {DISCLAIMER_SHORT}
             </div>
@@ -380,27 +403,5 @@ export default function Home() {
         <Footer compact />
       </div>
     </>
-  )
-}
-
-function Footer({ compact = false }: { compact?: boolean }) {
-  return (
-    <footer className="relative z-10 py-6 px-6 text-center" style={{borderTop: '1px solid rgba(217,119,6,0.1)'}}>
-      {!compact && (
-        <div className="max-w-4xl mx-auto mb-4 grid grid-cols-2 md:grid-cols-4 gap-4 text-xs" style={{color: 'var(--text-secondary)'}}>
-          <a href="/disclaimer" className="hover:underline" style={{color: '#d97706'}}>Disclaimer Financeiro</a>
-          <a href="/terms" className="hover:underline" style={{color: '#d97706'}}>Termos de Uso</a>
-          <a href="/privacy" className="hover:underline" style={{color: '#d97706'}}>Política de Privacidade</a>
-          <a href="/about" className="hover:underline" style={{color: '#d97706'}}>Sobre</a>
-        </div>
-      )}
-      <p className="text-xs" style={{color: 'var(--text-secondary)'}}>
-        ⚠️ Plataforma educacional. Não constitui consultoria financeira.
-      </p>
-      <p className="text-xs mt-1" style={{color: '#ffffff'}}>
-        Criado Por MaicknucleaR — <a href="https://instagram.com/dubmariachi" target="_blank" rel="noopener noreferrer"
-          className="hover:underline" style={{color: '#d97706'}}>@dubmariachi</a>
-      </p>
-    </footer>
   )
 }

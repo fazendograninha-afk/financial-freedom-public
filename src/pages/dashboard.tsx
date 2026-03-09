@@ -9,6 +9,7 @@ import ChatBubble, { TypingIndicator } from '../components/ChatBubble'
 import Footer from '../components/Footer'
 import LoadingScreen from '../components/LoadingScreen'
 import { DisclaimerBanner, DisclaimerChatBar } from '../components/DisclaimerBanner'
+import CryptoBar from '../components/CryptoBar'
 
 interface Message {
   role: 'user' | 'assistant'
@@ -101,6 +102,8 @@ export default function Dashboard() {
             </div>
           </div>
         </header>
+
+        <CryptoBar />
 
         <main className="relative z-10 max-w-7xl mx-auto px-4 py-8">
           <DisclaimerBanner mini />

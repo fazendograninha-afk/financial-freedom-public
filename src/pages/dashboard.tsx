@@ -169,6 +169,91 @@ export default function Dashboard() {
             </div>
           </div>
 
+          {/* Ferramentas Gratuitas */}
+          <div className="mb-8">
+            <h3 className="font-display text-xl font-bold mb-4 text-gold-gradient">
+              🛠️ Ferramentas Gratuitas
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+
+              {/* Planilha CLT */}
+              <div className="rounded-xl p-5 flex flex-col gap-3 transition-all hover:scale-[1.02]"
+                style={{background: 'rgba(10,10,15,0.7)', border: '1px solid rgba(217,119,6,0.2)'}}>
+                <div className="flex items-center gap-3">
+                  <div className="w-12 h-12 rounded-xl flex items-center justify-center text-2xl flex-shrink-0"
+                    style={{background: 'rgba(22,163,74,0.15)', border: '1px solid rgba(22,163,74,0.3)'}}>
+                    📊
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-sm" style={{color: 'var(--text-primary)'}}>
+                      Planilha Controle Financeiro CLT
+                    </h4>
+                    <p className="text-xs" style={{color: '#16a34a'}}>Excel — Dark Luxury</p>
+                  </div>
+                </div>
+                <p className="text-xs leading-relaxed" style={{color: 'var(--text-secondary)'}}>
+                  Dashboard, 12 meses, metas, dívidas e análise anual. Regra 50-30-20 inclusa.
+                </p>
+                <div className="flex flex-wrap gap-1 mb-1">
+                  {['Dashboard','Metas','12 Meses','Dívidas','Análise Anual'].map(tag => (
+                    <span key={tag} className="text-xs px-2 py-0.5 rounded-full"
+                      style={{background:'rgba(22,163,74,0.08)', color:'rgba(22,163,74,0.8)', border:'1px solid rgba(22,163,74,0.2)'}}>
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+                <a
+                  href="/planilha-clt.xlsx"
+                  download="Controle-Financeiro-CLT-MaicknucleaR.xlsx"
+                  className="w-full text-center py-2.5 rounded-lg text-sm font-semibold transition-all"
+                  style={{background:'rgba(22,163,74,0.15)', color:'#16a34a', border:'1px solid rgba(22,163,74,0.3)'}}>
+                  ⬇️ Baixar Grátis
+                </a>
+              </div>
+
+              {/* Card futuro 1 */}
+              <div className="rounded-xl p-5 flex flex-col gap-3 opacity-50"
+                style={{background: 'rgba(10,10,15,0.4)', border: '1px dashed rgba(217,119,6,0.15)'}}>
+                <div className="flex items-center gap-3">
+                  <div className="w-12 h-12 rounded-xl flex items-center justify-center text-2xl"
+                    style={{background: 'rgba(217,119,6,0.08)', border: '1px solid rgba(217,119,6,0.15)'}}>
+                    📈
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-sm" style={{color: 'var(--text-primary)'}}>
+                      Calculadora de Juros Compostos
+                    </h4>
+                    <p className="text-xs" style={{color: '#d97706'}}>Em breve</p>
+                  </div>
+                </div>
+                <p className="text-xs leading-relaxed" style={{color: 'var(--text-secondary)'}}>
+                  Simule o crescimento dos seus investimentos ao longo do tempo.
+                </p>
+              </div>
+
+              {/* Card futuro 2 */}
+              <div className="rounded-xl p-5 flex flex-col gap-3 opacity-50"
+                style={{background: 'rgba(10,10,15,0.4)', border: '1px dashed rgba(217,119,6,0.15)'}}>
+                <div className="flex items-center gap-3">
+                  <div className="w-12 h-12 rounded-xl flex items-center justify-center text-2xl"
+                    style={{background: 'rgba(124,58,237,0.08)', border: '1px solid rgba(124,58,237,0.15)'}}>
+                    🎯
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-sm" style={{color: 'var(--text-primary)'}}>
+                      Planner de Metas Financeiras
+                    </h4>
+                    <p className="text-xs" style={{color: '#7c3aed'}}>Em breve</p>
+                  </div>
+                </div>
+                <p className="text-xs leading-relaxed" style={{color: 'var(--text-secondary)'}}>
+                  Defina e acompanhe metas com prazo e progresso visual.
+                </p>
+              </div>
+
+            </div>
+          </div>
+
           {/* Affiliate & Donation */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
             <div className="rounded-xl p-5"

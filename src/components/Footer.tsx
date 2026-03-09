@@ -13,7 +13,10 @@ export default function Footer({ compact = false }: { compact?: boolean }) {
         ⚠️ Plataforma educacional. Não constitui consultoria financeira.
       </p>
       <p className="text-xs mt-1" style={{color: '#ffffff'}}>
-        Criado Por MaicknucleaR —{' '}
+        Criado Por{' '}
+        <a href="https://maicknuclear.wixsite.com/online" target="_blank" rel="noopener noreferrer"
+          className="hover:underline font-semibold" style={{color: '#ffffff'}}>MaicknucleaR</a>
+        {' '}—{' '}
         <a href="https://instagram.com/dubmariachi" target="_blank" rel="noopener noreferrer"
           className="hover:underline" style={{color: '#d97706'}}>@dubmariachi</a>
       </p>

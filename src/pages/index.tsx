@@ -74,7 +74,7 @@ export default function Home() {
     if (!email) return toast.error('Digite seu e-mail primeiro')
     setLoading(true)
     const { error } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: 'https://financial-freedom-by-maicknuclear.up.railway.app/reset-password',
+      redirectTo: 'https://financial-freedom-public-production.up.railway.app/reset-password',
     })
     if (error) {
       toast.error(error.message)
@@ -111,7 +111,10 @@ export default function Home() {
             style={{borderBottom: '1px solid rgba(217,119,6,0.15)'}}>
             <div>
               <h1 className="font-display text-xl font-bold text-gold-gradient">Financial Freedom</h1>
-              <p className="text-xs font-semibold" style={{color: '#ffffff'}}>by MaicknucleaR</p>
+              <p className="text-xs font-semibold" style={{color: '#ffffff'}}>
+                <a href="https://maicknuclear.wixsite.com/online" target="_blank" rel="noopener noreferrer"
+                  className="hover:underline" style={{color: '#ffffff'}}>by MaicknucleaR</a>
+              </p>
             </div>
             <div className="flex gap-3">
               <button onClick={() => setMode('login')}
@@ -197,7 +200,7 @@ export default function Home() {
               </p>
               <a href={AFFILIATE_LINK} target="_blank" rel="noopener noreferrer"
                 className="text-sm font-semibold block mb-1 hover:underline" style={{color: '#d97706'}}>
-                [Livro] A Psicologia Financeira — Morgan Housel
+                📚 A Psicologia Financeira — Morgan Housel
               </a>
               <p className="text-xs" style={{color: 'var(--text-secondary)'}}>
                 Lições atemporais sobre fortuna, ganância e felicidade
@@ -341,7 +344,7 @@ export default function Home() {
 
                 {mode === 'register' && (
                   <div className="space-y-3 pt-2">
-                    <p className="text-xs font-medium" style={{color: '#d97706'}}>[!] Antes de continuar, confirme:</p>
+                    <p className="text-xs font-medium" style={{color: '#d97706'}}>⚠️ Antes de continuar, confirme:</p>
                     {[
                       { key: 'notConsultancy', label: 'Entendo que esta plataforma não fornece consultoria ou recomendação de investimentos' },
                       { key: 'myResponsibility', label: 'Reconheço que todas as decisões financeiras são de minha exclusiva responsabilidade' },
@@ -387,7 +390,7 @@ export default function Home() {
             </div>
 
             <div className="disclaimer-box rounded-lg p-4 mt-4 text-xs leading-relaxed" style={{color: 'var(--text-secondary)'}}>
-              [!] {DISCLAIMER_SHORT}
+              ⚠️ {DISCLAIMER_SHORT}
             </div>
 
             <div className="flex justify-center gap-4 mt-4 text-xs" style={{color: 'var(--text-secondary)'}}>
@@ -405,4 +408,3 @@ export default function Home() {
     </>
   )
 }
-

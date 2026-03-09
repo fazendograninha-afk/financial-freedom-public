@@ -257,28 +257,85 @@ export default function Dashboard() {
             </div>
           </div>
 
-          {/* Affiliate & Donation */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
-            <div className="rounded-xl p-5"
-              style={{background: 'rgba(217,119,6,0.05)', border: '1px solid rgba(217,119,6,0.15)'}}>
-              <p className="text-xs mb-3" style={{color: 'var(--text-secondary)'}}>🔗 Links de afiliado</p>
-              <a href="https://www.mercadolivre.com.br/livro-a-psicologia-financeira-licoes-atemporais-sobre-fortuna-ganncia-e-felicidade-de-housel-morgan-editora-harpercollins-brasil-capa-mole-em-portugus-2021/p/MLB19320442?matt_event_ts=1772937327156&matt_d2id=dfa58651-a180-428e-94df-fc8220896524&matt_tracing_id=2645612b-68d0-448d-b4bc-afd2c69ca15b#polycard_client=recommendations_home_affiliate-profile&reco_backend=item_decorator&reco_client=home_affiliate-profile&reco_item_pos=0&source=affiliate-profile&reco_backend_type=function&reco_id=d6662921-6799-4116-87e3-70bcf33908c5&tracking_id=7fda547d-806f-4eb5-b606-fcfc0e6d0c51&wid=MLB5270193474&sid=recos&c_id=/home/card-featured/element&c_uid=2068bc96-c9f3-4c7c-9c82-1cce86d69fd4"
-                target="_blank" rel="noopener noreferrer"
-                className="font-semibold text-sm block mb-1 hover:underline" style={{color: '#d97706'}}>
-                📚 A Psicologia Financeira — Morgan Housel
-              </a>
-              <p className="text-xs mt-1" style={{color: 'var(--text-secondary)', opacity: 0.6}}>
-                (Link de afiliado — sem custo adicional para você)
-              </p>
-            </div>
-            <div className="rounded-xl p-5 text-center"
-              style={{background: 'rgba(10,10,15,0.6)', border: '1px solid rgba(217,119,6,0.15)'}}>
-              <p className="text-sm mb-2" style={{color: 'var(--text-secondary)'}}>☕ Apoie este projeto</p>
-              <div className="w-20 h-20 mx-auto rounded-xl overflow-hidden"
-                style={{border: '2px solid rgba(217,119,6,0.3)', background: 'white', padding: '4px'}}>
-                <img src="/qrcode-donation.jpg" alt="QR Code PIX" className="w-full h-full object-cover rounded-lg" />
-              </div>
-              <p className="text-xs mt-2" style={{color: '#d97706'}}>PIX / Qualquer valor 🙏</p>
+          {/* Livros Recomendados */}
+          <div className="mb-8">
+            <h3 className="font-display text-xl font-bold mb-1 text-gold-gradient">📚 Leituras Recomendadas</h3>
+            <p className="text-xs mb-4" style={{color: 'var(--text-secondary)'}}>
+              Links de afiliado — sem custo adicional para você
+            </p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+              {[
+                {
+                  emoji: '🧠', cor: '#d97706',
+                  titulo: 'A Psicologia Financeira',
+                  autor: 'Morgan Housel',
+                  desc: 'Lições atemporais sobre fortuna, ganância e felicidade',
+                  url: 'https://www.mercadolivre.com.br/livro-a-psicologia-financeira-licoes-atemporais-sobre-fortuna-ganncia-e-felicidade-de-housel-morgan-editora-harpercollins-brasil-capa-mole-em-portugus-2021/p/MLB19320442?matt_event_ts=1772937327156&matt_d2id=dfa58651-a180-428e-94df-fc8220896524&matt_tracing_id=2645612b-68d0-448d-b4bc-afd2c69ca15b#polycard_client=recommendations_home_affiliate-profile&reco_backend=item_decorator&reco_client=home_affiliate-profile&reco_item_pos=0&source=affiliate-profile&reco_backend_type=function&reco_id=d6662921-6799-4116-87e3-70bcf33908c5&tracking_id=7fda547d-806f-4eb5-b606-fcfc0e6d0c51&wid=MLB5270193474&sid=recos&c_id=/home/card-featured/element&c_uid=2068bc96-c9f3-4c7c-9c82-1cce86d69fd4'
+                },
+                {
+                  emoji: '👑', cor: '#7c3aed',
+                  titulo: 'As 48 Leis do Poder',
+                  autor: 'Robert Greene',
+                  desc: 'O clássico sobre poder, estratégia e influência',
+                  url: 'https://www.mercadolivre.com.br/as-48-leis-do-poder-robert-greene-editora-rocco-ltda/p/MLB19202572?matt_event_ts=1773024958142&matt_d2id=dfa58651-a180-428e-94df-fc8220896524&matt_tracing_id=c5a4c58f-fbe4-4b9c-b05e-24c0c38ab752#polycard_client=recommendations_home_affiliate-profile&reco_backend=item_decorator&reco_client=home_affiliate-profile&reco_item_pos=0&source=affiliate-profile&reco_backend_type=function&reco_id=7d389016-7228-4991-9705-9f701624a779&tracking_id=0080cd0f-1d00-4a92-8c45-9d8e9a925dc8&wid=MLB3853877213&sid=recos&c_id=/home/card-featured/element&c_uid=8664141c-f5fd-4380-8ff1-1ab0571339a7'
+                },
+                {
+                  emoji: '💰', cor: '#16a34a',
+                  titulo: 'Pai Rico, Pai Pobre',
+                  autor: 'Robert Kiyosaki',
+                  desc: 'O que os ricos ensinam a seus filhos sobre dinheiro',
+                  url: 'https://www.mercadolivre.com.br/pai-rico-pai-pobre-edico-de-20-anos-atualizada-e-ampliada-o-que-os-ricos-ensinam-a-seus-filhos-sobre-dinheiro-editora-alta-books/p/MLB19443719?pdp_filters=item_id%3AMLB3959727810&matt_event_ts=1773025011220&matt_d2id=dfa58651-a180-428e-94df-fc8220896524&matt_tracing_id=429e8d69-78c4-4c10-8a17-fa856ee70f11#polycard_client=recommendations_home_affiliate-profile&reco_backend=item_decorator&wid=MLB3959727810&reco_client=home_affiliate-profile&reco_item_pos=0&source=affiliate-profile&reco_backend_type=function&reco_id=a9072325-f061-4734-bcfb-c6095e6e88f1&tracking_id=a8c0b589-db6f-4f6e-b924-d948ec85f61c&sid=recos&c_id=/home/card-featured/element&c_uid=2a634273-2fd5-4374-bdb1-91c933b334a1'
+                },
+                {
+                  emoji: '⚡', cor: '#2563eb',
+                  titulo: 'O Poder do Hábito',
+                  autor: 'Charles Duhigg',
+                  desc: 'Por que fazemos o que fazemos na vida e nos negócios',
+                  url: 'https://www.mercadolivre.com.br/o-poder-do-habito-de-charles-duhigg-editora-objetiva-capa-mole/p/MLB19458761?matt_event_ts=1773025106029&matt_d2id=dfa58651-a180-428e-94df-fc8220896524&matt_tracing_id=ab7c1efc-766d-48f6-94d7-2aa1cb6956bf#polycard_client=recommendations_home_affiliate-profile&reco_backend=item_decorator&reco_client=home_affiliate-profile&reco_item_pos=0&source=affiliate-profile&reco_backend_type=function&reco_id=8a286ed9-03bc-43a3-bd70-fbb4454c1044&tracking_id=f18d1984-4ac7-46c6-a2b6-e35c0201bb68&wid=MLB3902925595&sid=recos&c_id=/home/card-featured/element&c_uid=6704cf6c-4886-4429-98c3-f99089e0710c'
+                },
+                {
+                  emoji: '🎯', cor: '#dc2626',
+                  titulo: 'A Arte de Gastar Dinheiro',
+                  autor: 'Morgan Housel',
+                  desc: 'Escolhas simples para uma vida financeira equilibrada',
+                  url: 'https://www.mercadolivre.com.br/a-arte-de-gastar-dinheiro-escolhas-simples-para-uma-vida-equilibrada-do-mesmo-autor-de-a-psicologia-financeira/p/MLB53908652?matt_event_ts=1773025141050&matt_d2id=dfa58651-a180-428e-94df-fc8220896524&matt_tracing_id=b80ab0fc-6338-40af-a6a2-ea4a3a510d6d#polycard_client=recommendations_home_affiliate-profile&reco_backend=item_decorator&reco_client=home_affiliate-profile&reco_item_pos=0&source=affiliate-profile&reco_backend_type=function&reco_id=9b66bdbf-936d-4a7a-b941-4e27f4d04eb2&tracking_id=cc64ec83-f0fb-42f6-8def-35de49db5644&wid=MLB4224850923&sid=recos&c_id=/home/card-featured/element&c_uid=5066b0ca-dcdb-48ce-b94f-454793d54388'
+                },
+                {
+                  emoji: '☕', cor: '#d97706',
+                  titulo: 'Apoie este projeto',
+                  autor: 'PIX — qualquer valor',
+                  desc: 'Sua contribuição mantém o projeto gratuito e vivo 🙏',
+                  url: null,
+                  qr: true
+                },
+              ].map((item: any) => (
+                <div key={item.titulo}
+                  className="rounded-xl p-4 flex flex-col gap-2 transition-all hover:scale-[1.01]"
+                  style={{background: 'rgba(10,10,15,0.7)', border: `1px solid ${item.cor}25`}}>
+                  <div className="flex items-center gap-2">
+                    <span className="text-xl">{item.emoji}</span>
+                    <div>
+                      <p className="text-xs font-semibold leading-tight" style={{color: 'var(--text-primary)'}}>{item.titulo}</p>
+                      <p className="text-xs" style={{color: item.cor}}>{item.autor}</p>
+                    </div>
+                  </div>
+                  <p className="text-xs leading-relaxed" style={{color: 'var(--text-secondary)'}}>{item.desc}</p>
+                  {item.qr ? (
+                    <div className="flex justify-center mt-1">
+                      <div className="w-16 h-16 rounded-lg overflow-hidden"
+                        style={{border: `2px solid ${item.cor}40`, background: 'white', padding: '3px'}}>
+                        <img src="/qrcode-donation.jpg" alt="QR Code PIX" className="w-full h-full object-cover rounded" />
+                      </div>
+                    </div>
+                  ) : (
+                    <a href={item.url} target="_blank" rel="noopener noreferrer"
+                      className="text-center text-xs py-1.5 rounded-lg mt-auto transition-colors hover:opacity-90"
+                      style={{background: `${item.cor}15`, color: item.cor, border: `1px solid ${item.cor}30`}}>
+                      Ver no Mercado Livre →
+                    </a>
+                  )}
+                </div>
+              ))}
             </div>
           </div>
         </main>

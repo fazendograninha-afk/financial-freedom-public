@@ -7,13 +7,12 @@ import Footer from '../components/Footer'
 
 const DISCLAIMER_SHORT = `Esta plataforma é uma ferramenta digital de organização e visualização de informações financeiras para fins exclusivamente educacionais e informacionais. Não constitui consultoria financeira, recomendação de investimento ou assessoria de qualquer natureza. Toda decisão financeira é de exclusiva responsabilidade do usuário.`
 
-const AFFILIATE_LINK = `https://www.mercadolivre.com.br/livro-a-psicologia-financeira-licoes-atemporais-sobre-fortuna-ganncia-e-felicidade-de-housel-morgan-editora-harpercollins-brasil-capa-mole-em-portugus-2021/p/MLB19320442?matt_event_ts=1772937327156&matt_d2id=dfa58651-a180-428e-94df-fc8220896524&matt_tracing_id=2645612b-68d0-448d-b4bc-afd2c69ca15b#polycard_client=recommendations_home_affiliate-profile&reco_backend=item_decorator&reco_client=home_affiliate-profile&reco_item_pos=0&source=affiliate-profile&reco_backend_type=function&reco_id=d6662921-6799-4116-87e3-70bcf33908c5&tracking_id=7fda547d-806f-4eb5-b606-fcfc0e6d0c51&wid=MLB5270193474&sid=recos&c_id=/home/card-featured/element&c_uid=2068bc96-c9f3-4c7c-9c82-1cce86d69fd4`
+const GESTOR_MONEY = `https://hotm.io/sJ54hz`
 
 export default function Home() {
   const router = useRouter()
-  const [mode, setMode] = useState<'landing' | 'login' | 'register' | 'forgot'>('landing')
+  const [mode, setMode] = useState<'landing' | 'login' | 'register' | 'success'>('landing')
   const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
   const [loading, setLoading] = useState(false)
   const [checkboxes, setCheckboxes] = useState({
     notConsultancy: false,
@@ -21,68 +20,38 @@ export default function Home() {
     understandRisk: false,
     acceptTerms: false,
   })
-  const [particles, setParticles] = useState<Array<{id: number, size: number, left: number, duration: number, delay: number}>>([])
+  const [particles, setParticles] = useState<Array<{id:number,size:number,left:number,duration:number,delay:number}>>([])
 
   useEffect(() => {
     supabase.auth.getUser().then(({ data }) => {
       if (data.user) router.push('/dashboard')
     })
     const p = Array.from({ length: 20 }, (_, i) => ({
-      id: i,
-      size: Math.random() * 3 + 1,
-      left: Math.random() * 100,
-      duration: Math.random() * 15 + 10,
-      delay: Math.random() * -20,
+      id: i, size: Math.random() * 3 + 1, left: Math.random() * 100,
+      duration: Math.random() * 15 + 10, delay: Math.random() * -20,
     }))
     setParticles(p)
   }, [])
 
-  const handleLogin = async () => {
-    if (!email || !password) return toast.error('Preencha todos os campos')
+  // ── MAGIC LINK — envia link de acesso por e-mail ───────────────────────
+  const handleMagicLink = async () => {
+    if (!email) return toast.error('Digite seu e-mail')
+    if (!/\S+@\S+\.\S+/.test(email)) return toast.error('E-mail inválido')
     setLoading(true)
-    const { error } = await supabase.auth.signInWithPassword({ email, password })
-    if (error) {
-      toast.error(error.message === 'Invalid login credentials' ? 'E-mail ou senha incorretos' : error.message)
-    } else {
-      toast.success('Bem-vindo de volta!')
-      router.push('/dashboard')
-    }
-    setLoading(false)
-  }
-
-  const handleRegister = async () => {
-    const allChecked = Object.values(checkboxes).every(Boolean)
-    if (!allChecked) return toast.error('Você precisa aceitar todos os termos para continuar')
-    if (!email || !password) return toast.error('Preencha todos os campos')
-    if (password.length < 6) return toast.error('A senha deve ter pelo menos 6 caracteres')
-    setLoading(true)
-    const { error } = await supabase.auth.signUp({
+    const { error } = await supabase.auth.signInWithOtp({
       email,
-      password,
-      options: { data: { financial_profile: 'conservador', level: 'iniciante' } }
+      options: {
+        emailRedirectTo: 'https://financial-freedom-by-maicknuclear.up.railway.app/dashboard',
+        data: { financial_profile: 'conservador', level: 'iniciante' }
+      }
     })
     if (error) {
       toast.error(error.message)
+      setLoading(false)
     } else {
-      toast.success('Conta criada! Verifique seu e-mail.')
-      router.push('/onboarding')
+      setMode('success')
+      setLoading(false)
     }
-    setLoading(false)
-  }
-
-  const handleForgotPassword = async () => {
-    if (!email) return toast.error('Digite seu e-mail primeiro')
-    setLoading(true)
-    const { error } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: 'https://financial-freedom-public-production.up.railway.app/reset-password',
-    })
-    if (error) {
-      toast.error(error.message)
-    } else {
-      toast.success('E-mail de recuperação enviado! Verifique sua caixa de entrada.')
-      setMode('login')
-    }
-    setLoading(false)
   }
 
   const allChecked = Object.values(checkboxes).every(Boolean)
@@ -91,15 +60,13 @@ export default function Home() {
   if (mode === 'landing') {
     return (
       <>
-        <Head><title>Financial Freedom by MaicknucleaR</title></Head>
+        <Head><title>Financial Freedom by MaicknucleaR </title></Head>
         <div className="min-h-screen relative overflow-hidden" style={{background: 'var(--obsidian)'}}>
           <div className="atomic-bg">
             {particles.map(p => (
               <div key={p.id} className="particle" style={{
-                width: p.size, height: p.size,
-                left: `${p.left}%`,
-                animationDuration: `${p.duration}s`,
-                animationDelay: `${p.delay}s`,
+                width: p.size, height: p.size, left: `${p.left}%`,
+                animationDuration: `${p.duration}s`, animationDelay: `${p.delay}s`,
               }} />
             ))}
           </div>
@@ -111,7 +78,7 @@ export default function Home() {
             style={{borderBottom: '1px solid rgba(217,119,6,0.15)'}}>
             <div>
               <h1 className="font-display text-xl font-bold text-gold-gradient">Financial Freedom</h1>
-              <p className="text-xs font-semibold" style={{color: '#ffffff'}}>
+              <p className="text-xs font-semibold">
                 <a href="https://maicknuclear.wixsite.com/online" target="_blank" rel="noopener noreferrer"
                   className="hover:underline" style={{color: '#ffffff'}}>by MaicknucleaR</a>
               </p>
@@ -163,7 +130,7 @@ export default function Home() {
             </p>
 
             <div className="flex flex-wrap justify-center gap-3 mb-12">
-              {['Warren Buffett', 'Ray Dalio', 'Michael Saylor', 'George Soros', 'Jim Simons', '+10 lendas'].map(name => (
+              {['Warren Buffett','Ray Dalio','Michael Saylor','George Soros','Jim Simons','+10 lendas'].map(name => (
                 <span key={name} className="px-3 py-1 rounded-full text-xs font-medium"
                   style={{background: 'rgba(217,119,6,0.08)', border: '1px solid rgba(217,119,6,0.2)', color: '#d97706'}}>
                   {name}
@@ -175,7 +142,7 @@ export default function Home() {
               className="btn-gold px-10 py-4 rounded-xl text-lg font-semibold mb-4">
               Criar Conta Gratuita →
             </button>
-            <p className="text-xs" style={{color: 'var(--text-secondary)'}}>Sem cartão de crédito. Sem compromisso.</p>
+            <p className="text-xs" style={{color: 'var(--text-secondary)'}}>Apenas seu e-mail. Sem senha. Sem cartão.</p>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-16 max-w-4xl w-full">
               {[
@@ -192,20 +159,23 @@ export default function Home() {
               ))}
             </div>
 
-            {/* Affiliate — Livro Psicologia Financeira */}
-            <div className="mt-16 p-5 rounded-xl max-w-lg w-full text-center"
-              style={{background: 'rgba(217,119,6,0.05)', border: '1px solid rgba(217,119,6,0.2)'}}>
-              <p className="text-xs mb-1" style={{color: 'var(--text-secondary)'}}>
-                🔗 <em>Link de afiliado</em> — Leitura recomendada
-              </p>
-              <a href={AFFILIATE_LINK} target="_blank" rel="noopener noreferrer"
-                className="text-sm font-semibold block mb-1 hover:underline" style={{color: '#d97706'}}>
-                📚 A Psicologia Financeira — Morgan Housel
+            {/* GestorMoney — Afiliado Principal */}
+            <div className="mt-16 p-5 rounded-xl max-w-lg w-full"
+              style={{background: 'rgba(217,119,6,0.08)', border: '2px solid rgba(217,119,6,0.3)'}}>
+              <p className="text-xs mb-1" style={{color: 'var(--text-secondary)'}}>🔗 Parceiro recomendado</p>
+              <a href={GESTOR_MONEY} target="_blank" rel="noopener noreferrer"
+                className="text-base font-bold block mb-1 hover:underline" style={{color: '#d97706'}}>
+                💚 GestorMoney — Controle financeiro pelo WhatsApp
               </a>
-              <p className="text-xs" style={{color: 'var(--text-secondary)'}}>
-                Lições atemporais sobre fortuna, ganância e felicidade
+              <p className="text-sm" style={{color: 'var(--text-secondary)'}}>
+                Controle suas finanças de forma simples e rápida direto no WhatsApp
               </p>
-              <p className="text-xs mt-1" style={{color: 'rgba(168,159,140,0.5)'}}>
+              <a href={GESTOR_MONEY} target="_blank" rel="noopener noreferrer"
+                className="inline-block mt-3 px-5 py-2 rounded-lg text-sm font-semibold transition-all"
+                style={{background: 'rgba(217,119,6,0.15)', color: '#d97706', border: '1px solid rgba(217,119,6,0.4)'}}>
+                Conhecer o GestorMoney →
+              </a>
+              <p className="text-xs mt-2" style={{color: 'rgba(168,159,140,0.4)'}}>
                 (Link de afiliado — posso receber comissão sem custo adicional para você)
               </p>
             </div>
@@ -216,68 +186,48 @@ export default function Home() {
               <p className="text-sm mb-3" style={{color: 'var(--text-secondary)'}}>☕ Apoie este projeto com qualquer valor</p>
               <div className="w-32 h-32 mx-auto rounded-xl overflow-hidden"
                 style={{border: '2px solid rgba(217,119,6,0.3)', background: 'white', padding: '6px'}}>
-                <img src="/qrcode-donation.jpg" alt="QR Code PIX - Doação" className="w-full h-full object-cover rounded-lg" />
+                <img src="/qrcode-donation.jpg" alt="QR Code PIX" className="w-full h-full object-cover rounded-lg" />
               </div>
-              <p className="text-xs mt-2" style={{color: '#d97706'}}>PIX / Qualquer valor</p>
-              <p className="text-xs mt-0.5" style={{color: 'rgba(168,159,140,0.5)'}}>Sua contribuição mantém o projeto vivo 🙏</p>
+              <p className="text-xs mt-2" style={{color: '#d97706'}}>PIX / Qualquer valor 🙏</p>
             </div>
           </main>
-
           <Footer />
         </div>
       </>
     )
   }
 
-  // ── FORGOT PASSWORD ───────────────────────────────────────────────────────
-  if (mode === 'forgot') {
+  // ── SUCESSO — e-mail enviado ──────────────────────────────────────────────
+  if (mode === 'success') {
     return (
       <>
-        <Head><title>Recuperar Senha — Financial Freedom</title></Head>
-        <div className="min-h-screen relative overflow-hidden flex flex-col" style={{background: 'var(--obsidian)'}}>
+        <Head><title>Verifique seu e-mail — Financial Freedom</title></Head>
+        <div className="min-h-screen flex flex-col items-center justify-center px-4"
+          style={{background: 'var(--obsidian)'}}>
           <div className="fixed inset-0 hex-pattern opacity-20 pointer-events-none" />
-          <header className="relative z-10 px-6 py-4">
-            <button onClick={() => setMode('login')} className="text-sm transition-colors"
-              style={{color: 'var(--text-secondary)'}}>← Voltar</button>
-          </header>
-          <div className="relative z-10 flex-1 flex items-center justify-center px-4 py-8">
-            <div className="w-full max-w-md">
-              <div className="text-center mb-8">
-                <div className="text-4xl mb-3">🔑</div>
-                <h1 className="font-display text-2xl font-bold text-gold-gradient">Recuperar Senha</h1>
-                <p className="text-sm mt-1" style={{color: 'var(--text-secondary)'}}>
-                  Digite seu e-mail e enviaremos um link de recuperação
-                </p>
-              </div>
-              <div className="rounded-2xl p-6 border-gold-glow" style={{background: 'rgba(10,10,15,0.9)'}}>
-                <div className="space-y-4">
-                  <div>
-                    <label className="block text-sm font-medium mb-1.5" style={{color: 'var(--text-secondary)'}}>
-                      E-mail cadastrado
-                    </label>
-                    <input
-                      type="email"
-                      value={email}
-                      onChange={e => setEmail(e.target.value)}
-                      placeholder="seu@email.com"
-                      className="input-gold w-full px-4 py-3 rounded-lg text-sm"
-                      onKeyDown={e => e.key === 'Enter' && handleForgotPassword()}
-                    />
-                  </div>
-                  <button
-                    onClick={handleForgotPassword}
-                    disabled={loading}
-                    className="w-full btn-gold py-3 rounded-lg font-semibold text-sm disabled:opacity-40">
-                    {loading ? 'Enviando...' : 'Enviar Link de Recuperação'}
-                  </button>
-                  <button onClick={() => setMode('login')}
-                    className="w-full text-center text-sm py-2" style={{color: 'var(--text-secondary)'}}>
-                    Lembrei a senha →{' '}
-                    <span style={{color: '#d97706'}}>Entrar</span>
-                  </button>
-                </div>
+          <div className="relative z-10 w-full max-w-md text-center">
+            <div className="text-6xl mb-6">📬</div>
+            <h1 className="font-display text-3xl font-bold text-gold-gradient mb-3">
+              Verifique seu e-mail!
+            </h1>
+            <p className="text-base mb-2" style={{color: 'var(--text-primary)'}}>
+              Enviamos um link mágico para:
+            </p>
+            <p className="text-lg font-bold mb-6" style={{color: '#d97706'}}>{email}</p>
+            <div className="rounded-2xl p-6 mb-6" style={{background: 'rgba(10,10,15,0.9)', border: '1px solid rgba(217,119,6,0.2)'}}>
+              <p className="text-sm mb-4" style={{color: 'var(--text-secondary)'}}>
+                Clique no link do e-mail para acessar a plataforma. Sem senha necessária!
+              </p>
+              <div className="flex flex-col gap-2 text-xs" style={{color: 'rgba(168,159,140,0.6)'}}>
+                <p>📁 Verifique também a pasta <strong>Spam / Lixo Eletrônico</strong></p>
+                <p>⏱️ O link expira em <strong>60 minutos</strong></p>
+                <p>🔒 Acesso seguro, sem necessidade de senha</p>
               </div>
             </div>
+            <button onClick={() => { setMode('login'); setEmail('') }}
+              className="text-sm" style={{color: '#d97706'}}>
+              ← Usar outro e-mail
+            </button>
           </div>
           <Footer compact />
         </div>
@@ -321,25 +271,21 @@ export default function Home() {
 
             <div className="rounded-2xl p-6 border-gold-glow" style={{background: 'rgba(10,10,15,0.9)'}}>
               <div className="space-y-4">
-                <div>
-                  <label className="block text-sm font-medium mb-1.5" style={{color: 'var(--text-secondary)'}}>E-mail</label>
-                  <input type="email" value={email} onChange={e => setEmail(e.target.value)}
-                    placeholder="seu@email.com" className="input-gold w-full px-4 py-3 rounded-lg text-sm" />
+
+                {/* Explicação magic link */}
+                <div className="rounded-lg p-3 text-xs text-center"
+                  style={{background: 'rgba(217,119,6,0.06)', border: '1px solid rgba(217,119,6,0.15)', color: 'var(--text-secondary)'}}>
+                  🔑 Sem senha! Digite seu e-mail e receba um link de acesso instantâneo.
                 </div>
+
                 <div>
-                  <div className="flex justify-between items-center mb-1.5">
-                    <label className="block text-sm font-medium" style={{color: 'var(--text-secondary)'}}>Senha</label>
-                    {mode === 'login' && (
-                      <button onClick={() => setMode('forgot')}
-                        className="text-xs hover:underline transition-colors" style={{color: '#d97706'}}>
-                        Esqueceu a senha?
-                      </button>
-                    )}
-                  </div>
-                  <input type="password" value={password} onChange={e => setPassword(e.target.value)}
-                    placeholder={mode === 'register' ? 'Mínimo 6 caracteres' : '••••••••'}
+                  <label className="block text-sm font-medium mb-1.5" style={{color: 'var(--text-secondary)'}}>
+                    Seu e-mail
+                  </label>
+                  <input type="email" value={email} onChange={e => setEmail(e.target.value)}
+                    placeholder="seu@email.com"
                     className="input-gold w-full px-4 py-3 rounded-lg text-sm"
-                    onKeyDown={e => e.key === 'Enter' && (mode === 'login' ? handleLogin() : handleRegister())} />
+                    onKeyDown={e => e.key === 'Enter' && (allChecked || mode === 'login') && handleMagicLink()} />
                 </div>
 
                 {mode === 'register' && (
@@ -348,8 +294,8 @@ export default function Home() {
                     {[
                       { key: 'notConsultancy', label: 'Entendo que esta plataforma não fornece consultoria ou recomendação de investimentos' },
                       { key: 'myResponsibility', label: 'Reconheço que todas as decisões financeiras são de minha exclusiva responsabilidade' },
-                      { key: 'understandRisk', label: 'Compreendo que investimentos podem resultar em perdas financeiras, inclusive perda total' },
-                      { key: 'acceptTerms', label: 'Aceito integralmente os Termos de Uso, Disclaimer Financeiro e Política de Privacidade' },
+                      { key: 'understandRisk', label: 'Compreendo que investimentos podem resultar em perdas financeiras' },
+                      { key: 'acceptTerms', label: 'Aceito os Termos de Uso, Disclaimer Financeiro e Política de Privacidade' },
                     ].map(({ key, label }) => (
                       <label key={key} className="flex gap-3 cursor-pointer">
                         <div className="relative mt-0.5 flex-shrink-0">
@@ -375,10 +321,11 @@ export default function Home() {
                   </div>
                 )}
 
-                <button onClick={mode === 'login' ? handleLogin : handleRegister}
+                <button
+                  onClick={handleMagicLink}
                   disabled={loading || (mode === 'register' && !allChecked)}
                   className="w-full btn-gold py-3 rounded-lg font-semibold text-sm mt-2 disabled:opacity-40 disabled:cursor-not-allowed">
-                  {loading ? 'Aguarde...' : mode === 'login' ? 'Entrar' : 'Criar Conta Gratuita'}
+                  {loading ? 'Enviando link...' : mode === 'login' ? '✉️ Enviar Link de Acesso' : '✉️ Criar Conta e Enviar Link'}
                 </button>
 
                 <button onClick={() => setMode(mode === 'login' ? 'register' : 'login')}
@@ -402,7 +349,6 @@ export default function Home() {
             </div>
           </div>
         </div>
-
         <Footer compact />
       </div>
     </>
